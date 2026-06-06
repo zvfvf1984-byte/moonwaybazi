@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Pencil, Plus, Trash2, LogOut, ShieldAlert, Check, X } from "lucide-react";
+import { Pencil, Plus, Trash2, LogOut, ShieldAlert, Check, X, KeyRound } from "lucide-react";
 import { formatPrice } from "@/lib/cart";
 
 type Service = {
@@ -42,6 +42,21 @@ function Admin() {
   const [tab, setTab] = useState<"orders" | "services">("orders");
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [showPwd, setShowPwd] = useState(false);
+  const [newPwd, setNewPwd] = useState("");
+  const [newPwd2, setNewPwd2] = useState("");
+  const [savingPwd, setSavingPwd] = useState(false);
+
+  const changePassword = async () => {
+    if (newPwd.length < 6) return toast.error("Минимум 6 символов");
+    if (newPwd !== newPwd2) return toast.error("Пароли не совпадают");
+    setSavingPwd(true);
+    const { error } = await supabase.auth.updateUser({ password: newPwd });
+    setSavingPwd(false);
+    if (error) return toast.error(error.message);
+    toast.success("Пароль обновлён");
+    setNewPwd(""); setNewPwd2(""); setShowPwd(false);
+  };
 
   useEffect(() => {
     (async () => {
@@ -91,10 +106,42 @@ VALUES ('${userId ?? "<ваш user_id>"}', 'admin');`}
           <div className="text-xs uppercase tracking-[0.4em] text-gold">Панель управления</div>
           <h1 className="mt-2 font-display text-4xl">Админка</h1>
         </div>
-        <button onClick={signOut} className="inline-flex items-center gap-2 px-5 py-2.5 border border-gold rounded-sm text-xs uppercase tracking-[0.2em] hover:bg-gold/10">
-          <LogOut className="w-4 h-4" /> Выйти
-        </button>
+        <div className="flex items-center gap-3">
+          <button onClick={() => setShowPwd(true)} className="inline-flex items-center gap-2 px-5 py-2.5 border border-gold rounded-sm text-xs uppercase tracking-[0.2em] hover:bg-gold/10">
+            <KeyRound className="w-4 h-4" /> Сменить пароль
+          </button>
+          <button onClick={signOut} className="inline-flex items-center gap-2 px-5 py-2.5 border border-gold rounded-sm text-xs uppercase tracking-[0.2em] hover:bg-gold/10">
+            <LogOut className="w-4 h-4" /> Выйти
+          </button>
+        </div>
       </div>
+
+      {showPwd && (
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur flex items-center justify-center p-6">
+          <div className="bg-card border border-gold/40 rounded-sm w-full max-w-md p-8">
+            <div className="flex items-center justify-between">
+              <h3 className="font-display text-2xl">Смена пароля</h3>
+              <button onClick={() => setShowPwd(false)} className="w-10 h-10 hover:bg-gold/10 rounded"><X className="w-4 h-4 mx-auto" /></button>
+            </div>
+            <div className="mt-6 space-y-4">
+              <label className="block">
+                <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Новый пароль</span>
+                <input type="password" value={newPwd} onChange={(e) => setNewPwd(e.target.value)} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none" />
+              </label>
+              <label className="block">
+                <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Повторите пароль</span>
+                <input type="password" value={newPwd2} onChange={(e) => setNewPwd2(e.target.value)} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none" />
+              </label>
+            </div>
+            <div className="mt-6 flex justify-end gap-3">
+              <button onClick={() => setShowPwd(false)} className="px-5 py-2.5 border border-gold/40 rounded-sm text-xs uppercase tracking-[0.2em] hover:bg-gold/10">Отмена</button>
+              <button disabled={savingPwd} onClick={changePassword} className="inline-flex items-center gap-2 px-6 py-2.5 bg-gold-gradient text-primary-foreground rounded-sm text-xs uppercase tracking-[0.2em] shadow-gold disabled:opacity-50">
+                <Check className="w-4 h-4" /> {savingPwd ? "Сохранение…" : "Сохранить"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="mt-8 flex gap-2 border-b border-gold/30">
         {(["orders", "services"] as const).map((t) => (
