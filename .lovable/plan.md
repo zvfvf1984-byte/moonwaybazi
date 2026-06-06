@@ -1,35 +1,24 @@
-## Изменения формы оформления заявки (`src/routes/cart.tsx`)
+## Fix: Restrict Realtime subscriptions to admins
 
-### 1. Контакт клиента — выбор типа
-Заменить одно поле «Telegram / e-mail / телефон» на:
-- Селектор типа контакта (radio/tabs): **Telegram** | **E-mail** | **Телефон**
-- Одно поле ввода, которое меняет тип/маску/валидацию в зависимости от выбора:
-  - **Telegram**: `@username` или `t.me/...`, разрешены латиница/цифры/`_`, мин. 4 символа
-  - **E-mail**: формат email (zod `.email()`)
-  - **Телефон**: только цифры, `+`, пробелы, `()`, `-`; мин. 10 цифр. Ввод фильтруется на лету (буквы блокируются)
+The tables `chat_sessions`, `chat_messages`, `chat_tickets` are in the `supabase_realtime` publication so the admin panel can receive live updates. The table-level SELECT policies already restrict reads to admins via `has_role(auth.uid(), 'admin')`, but Realtime broadcasts go through `realtime.messages`, which currently has no RLS — so any authenticated user can subscribe and receive row changes (including `visitor_phone`).
 
-В БД сохраняем как `customer_contact` в формате `"telegram: @user"` / `"email: ..."` / `"phone: +7..."` — чтобы не менять схему.
+### Change
 
-### 2. Данные рождения — три отдельные ячейки
-Заменить одно поле «Дата, время и место рождения» на три:
-- **Дата рождения** — Shadcn DatePicker (Popover + Calendar, `mode="single"`, `captionLayout="dropdown"` для выбора года, ограничение: не позже сегодня)
-- **Время рождения** — `<input type="time">` (стилизованный под текущие поля)
-- **Место рождения** — обычный текстовый input (город/страна), мин. 2 символа если заполнено
+Add RLS to `realtime.messages` so only admins can receive Realtime events for our chat channels.
 
-Все три — опциональные (как сейчас `birth_info`). Сохраняются в БД в существующее поле `birth_info` склеенной строкой: `"15.03.1990, 14:30, Москва"` (пропускаем пустые части).
+```sql
+ALTER TABLE realtime.messages ENABLE ROW LEVEL SECURITY;
 
-### 3. Валидация (zod + UX)
-- Расширить `formSchema` под новые поля с `superRefine` для контакта (правило зависит от выбранного типа).
-- Телефонное поле: `onChange` фильтрует недопустимые символы перед `setState` (защита от ввода букв).
-- E-mail: `type="email"`, проверка на submit.
-- Сообщения об ошибках через `toast.error` (как сейчас).
+CREATE POLICY "Admins receive chat realtime"
+ON realtime.messages
+FOR SELECT
+TO authenticated
+USING (public.has_role(auth.uid(), 'admin'));
+```
 
-### 4. UI
-- Селектор типа контакта — компактные пилюли/таб-кнопки в золотой стилистике (border `gold/30`, активная — `bg-gold/10` + `text-gold`).
-- Дата+Время в одну строку (grid 2 колонки на `sm+`), Место — отдельной строкой.
-- Существующая визуальная стилистика (`border-gold/30`, `rounded-xl`, `bg-background/60`) сохраняется.
+### Notes
 
-### Технические детали
-- Файл: только `src/routes/cart.tsx`.
-- Использовать существующий `@/components/ui/calendar`, `@/components/ui/popover`, `@/components/ui/button`, `date-fns` (для форматирования `dd.MM.yyyy`).
-- Схема БД и серверные функции (`notifyOrderCreated`, Telegram-уведомления) не меняются — формат `customer_contact`/`birth_info` остаётся строкой.
+- Matches existing SELECT policies on `chat_sessions` / `chat_messages` / `chat_tickets`.
+- Anon and non-admin authenticated users will no longer receive any Realtime broadcasts; the admin panel (`AdminChats.tsx`) is unaffected because admins still pass the check.
+- No application code changes needed.
+- After the migration, mark the finding as fixed.
