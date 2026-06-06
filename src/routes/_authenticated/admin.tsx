@@ -42,6 +42,21 @@ function Admin() {
   const [tab, setTab] = useState<"orders" | "services">("orders");
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [showPwd, setShowPwd] = useState(false);
+  const [newPwd, setNewPwd] = useState("");
+  const [newPwd2, setNewPwd2] = useState("");
+  const [savingPwd, setSavingPwd] = useState(false);
+
+  const changePassword = async () => {
+    if (newPwd.length < 6) return toast.error("Минимум 6 символов");
+    if (newPwd !== newPwd2) return toast.error("Пароли не совпадают");
+    setSavingPwd(true);
+    const { error } = await supabase.auth.updateUser({ password: newPwd });
+    setSavingPwd(false);
+    if (error) return toast.error(error.message);
+    toast.success("Пароль обновлён");
+    setNewPwd(""); setNewPwd2(""); setShowPwd(false);
+  };
 
   useEffect(() => {
     (async () => {
