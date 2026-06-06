@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Pencil, Plus, Trash2, LogOut, ShieldAlert, Check, X } from "lucide-react";
+import { Pencil, Plus, Trash2, LogOut, ShieldAlert, Check, X, KeyRound } from "lucide-react";
 import { formatPrice } from "@/lib/cart";
 
 type Service = {
