@@ -17,6 +17,7 @@ type Service = {
   icon: string | null;
   is_active: boolean;
   sort_order: number;
+  includes: string[];
 };
 
 type Order = {

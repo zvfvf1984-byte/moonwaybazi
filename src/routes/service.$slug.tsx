@@ -69,19 +69,16 @@ function ServicePage() {
           <h2 className="font-display text-2xl text-gold">Что включает</h2>
           <p className="mt-4 leading-relaxed whitespace-pre-line">{s.long_description}</p>
 
-          <div className="mt-10 grid sm:grid-cols-2 gap-4">
-            {[
-              "Персональный разбор по дате и времени рождения",
-              "Письменное резюме после сессии",
-              "Рекомендации по благоприятным датам",
-              "Конфиденциальность гарантирована",
-            ].map((t) => (
-              <div key={t} className="flex items-start gap-3 p-4 border border-gold/30 rounded-sm bg-card/40">
-                <Check className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
-                <div className="text-sm">{t}</div>
-              </div>
-            ))}
-          </div>
+          {Array.isArray((s as any).includes) && (s as any).includes.length > 0 && (
+            <div className="mt-10 grid sm:grid-cols-2 gap-4">
+              {((s as any).includes as string[]).map((t) => (
+                <div key={t} className="flex items-start gap-3 p-4 border border-gold/30 rounded-sm bg-card/40">
+                  <Check className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
+                  <div className="text-sm">{t}</div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <aside className="lg:col-span-5">
