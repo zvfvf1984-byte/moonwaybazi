@@ -1,10 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Trash2, Minus, Plus, ArrowLeft, Sparkles } from "lucide-react";
 import { useCart, removeFromCart, updateQty, cartTotal, formatPrice, clearCart } from "@/lib/cart";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
+import { notifyOrderCreated } from "@/lib/notify.functions";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({ meta: [{ title: "Корзина — Qi & Code" }] }),
@@ -22,6 +24,7 @@ function CartPage() {
   const items = useCart();
   const total = cartTotal(items);
   const navigate = useNavigate();
+  const notifyOrder = useServerFn(notifyOrderCreated);
   const [form, setForm] = useState({ customer_name: "", customer_contact: "", birth_info: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
 
@@ -34,18 +37,21 @@ function CartPage() {
       return;
     }
     setSubmitting(true);
-    const { error } = await supabase.from("orders").insert({
+    const { data: inserted, error } = await supabase.from("orders").insert({
       customer_name: parsed.data.customer_name,
       customer_contact: parsed.data.customer_contact,
       birth_info: parsed.data.birth_info || null,
       message: parsed.data.message || null,
       items: items.map((i) => ({ id: i.id, slug: i.slug, title: i.title, price: i.price, quantity: i.quantity })),
       total,
-    });
+    }).select("id").single();
     setSubmitting(false);
     if (error) {
       toast.error("Не удалось отправить заявку");
       return;
+    }
+    if (inserted?.id) {
+      notifyOrder({ data: { orderId: inserted.id } }).catch(() => {});
     }
     clearCart();
     toast.success("Заявка отправлена! Мы свяжемся с вами.");

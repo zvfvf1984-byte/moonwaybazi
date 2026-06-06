@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
+import { sendAdminTelegram, formatOrderMessage, formatTicketMessage } from "@/lib/notify.server";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -163,11 +164,26 @@ async function executeTool(
       chat_session_id: sessionId,
     }).select("id").single();
     if (error) return JSON.stringify({ ok: false, error: error.message });
+    sendAdminTelegram(formatOrderMessage({
+      customer_name: visitor.name,
+      customer_contact: visitor.phone,
+      total: Number(svc.price),
+      items,
+      birth_info: args.birth_info ?? null,
+      message,
+      source: "bot",
+    })).catch(() => {});
     return JSON.stringify({ ok: true, order_id: order.id, service: svc.title, total: svc.price });
   }
   if (toolName === "escalate_to_operator") {
-    await admin.from("chat_tickets").insert({ session_id: sessionId, reason: String(args.reason ?? "Клиент попросил оператора") });
+    const reason = String(args.reason ?? "Клиент попросил оператора");
+    await admin.from("chat_tickets").insert({ session_id: sessionId, reason });
     await admin.from("chat_sessions").update({ status: "escalated" }).eq("id", sessionId);
+    sendAdminTelegram(formatTicketMessage({
+      visitor_name: visitor.name,
+      visitor_phone: visitor.phone,
+      reason,
+    })).catch(() => {});
     return JSON.stringify({ ok: true, note: "Оператор уведомлён и свяжется по телефону." });
   }
   return JSON.stringify({ ok: false, error: "Unknown tool" });
@@ -208,9 +224,15 @@ async function runConversation(admin: SupabaseAdmin, sessionId: string, visitor:
     return reply;
   }
   const fallback = "Извините, диалог временно затруднён. Передаю оператору.";
-  await admin.from("chat_tickets").insert({ session_id: sessionId, reason: "Превышено число шагов AI" });
+  const reason = "Превышено число шагов AI";
+  await admin.from("chat_tickets").insert({ session_id: sessionId, reason });
   await admin.from("chat_sessions").update({ status: "escalated" }).eq("id", sessionId);
   await admin.from("chat_messages").insert({ session_id: sessionId, role: "assistant", content: fallback });
+  sendAdminTelegram(formatTicketMessage({
+    visitor_name: visitor.name,
+    visitor_phone: visitor.phone,
+    reason,
+  })).catch(() => {});
   return fallback;
 }
 
