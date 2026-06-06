@@ -1,10 +1,12 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { Trash2, Minus, Plus, ArrowLeft, Sparkles } from "lucide-react";
 import { useCart, removeFromCart, updateQty, cartTotal, formatPrice, clearCart } from "@/lib/cart";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
+import { notifyOrderCreated } from "@/lib/notify.functions";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({ meta: [{ title: "Корзина — Qi & Code" }] }),
