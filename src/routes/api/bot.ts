@@ -275,11 +275,8 @@ export const Route = createFileRoute("/api/bot")({
         await admin.from("chat_messages").insert({ session_id: session.id, role: "user", content: parsed.data.text });
         await admin.from("chat_sessions").update({ last_message_at: new Date().toISOString() }).eq("id", session.id);
 
-        if (session.status === "escalated") {
-          const notice = "Ваше сообщение получено. Оператор скоро свяжется с вами по телефону.";
-          await admin.from("chat_messages").insert({ session_id: session.id, role: "assistant", content: notice });
-          return Response.json({ reply: notice, status: "escalated" }, { headers: corsHeaders });
-        }
+        // Note: even if escalated, продолжаем помогать клиенту через AI (оформление заказа и т.п.).
+
 
         try {
           const reply = await runConversation(admin, session.id, { name: session.visitor_name, phone: session.visitor_phone });
