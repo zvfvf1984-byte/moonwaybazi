@@ -76,7 +76,7 @@ const TOOLS = [
     type: "function",
     function: {
       name: "escalate_to_operator",
-      description: "Передать диалог живому оператору, если возникли трудности или клиент просит человека.",
+      description: "Передать диалог оператору, если возникли трудности или клиент просит соединить с сотрудником.",
       parameters: {
         type: "object",
         properties: {
