@@ -191,7 +191,7 @@ function OrdersTab() {
 }
 
 function emptyService(): Partial<Service> {
-  return { title: "", slug: "", category: "Личность", short_description: "", long_description: "", price: 0, duration: "", icon: "Sparkles", is_active: true, sort_order: 0 };
+  return { title: "", slug: "", category: "Личность", short_description: "", long_description: "", price: 0, duration: "", icon: "Sparkles", is_active: true, sort_order: 0, includes: ["Персональный разбор по дате и времени рождения","Письменное резюме после сессии","Рекомендации по благоприятным датам","Конфиденциальность гарантирована"] };
 }
 
 function ServicesTab() {
