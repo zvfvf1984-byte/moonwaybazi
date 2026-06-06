@@ -218,6 +218,7 @@ function ServicesTab() {
       icon: editing.icon ?? "Sparkles",
       is_active: editing.is_active ?? true,
       sort_order: Number(editing.sort_order ?? 0),
+      includes: (editing.includes ?? []).filter((x) => x && x.trim().length > 0),
     };
     const op = editing.id
       ? supabase.from("services").update(payload).eq("id", editing.id)
