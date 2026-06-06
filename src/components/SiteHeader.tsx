@@ -52,7 +52,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-3">
           <Link
             to="/cart"
-            className="relative inline-flex items-center gap-2 px-4 h-11 border border-gold rounded-sm hover:bg-gold/10 transition"
+            className="relative inline-flex items-center gap-2 px-4 h-11 border border-gold rounded-xl hover:bg-gold/10 transition"
           >
             <ShoppingBag className="w-4 h-4 text-gold" />
             <span className="hidden sm:inline text-sm tracking-wide">Корзина</span>
@@ -64,7 +64,7 @@ export function SiteHeader() {
           </Link>
           <button
             onClick={() => setOpen((v) => !v)}
-            className="md:hidden w-11 h-11 border border-gold rounded-sm flex items-center justify-center"
+            className="md:hidden w-11 h-11 border border-gold rounded-xl flex items-center justify-center"
             aria-label="Меню"
           >
             {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}

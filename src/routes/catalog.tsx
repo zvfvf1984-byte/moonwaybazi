@@ -59,7 +59,7 @@ function Catalog() {
       <div className="mt-10 flex flex-wrap justify-center gap-3">
         <button
           onClick={() => navigate({ search: {} })}
-          className={`px-5 py-2 text-xs uppercase tracking-[0.2em] rounded-sm border transition ${
+          className={`px-5 py-2 text-xs uppercase tracking-[0.2em] rounded-xl border transition ${
             !category ? "bg-gold-gradient text-primary-foreground border-transparent" : "border-gold/40 hover:border-gold"
           }`}
         >
@@ -69,7 +69,7 @@ function Catalog() {
           <button
             key={c}
             onClick={() => navigate({ search: { category: c } })}
-            className={`px-5 py-2 text-xs uppercase tracking-[0.2em] rounded-sm border transition ${
+            className={`px-5 py-2 text-xs uppercase tracking-[0.2em] rounded-xl border transition ${
               category === c ? "bg-gold-gradient text-primary-foreground border-transparent" : "border-gold/40 hover:border-gold"
             }`}
           >
@@ -86,7 +86,7 @@ function Catalog() {
               key={s.id}
               to="/service/$slug"
               params={{ slug: s.slug }}
-              className="group relative p-8 border border-gold/30 rounded-sm bg-card/50 hover:border-gold hover:bg-card transition flex flex-col"
+              className="group relative p-8 border border-gold/30 rounded-xl bg-card/50 hover:border-gold hover:bg-card transition flex flex-col"
             >
               <div className="flex items-start justify-between">
                 <div className="w-14 h-14 rounded-full bg-gold/10 border border-gold/40 flex items-center justify-center">

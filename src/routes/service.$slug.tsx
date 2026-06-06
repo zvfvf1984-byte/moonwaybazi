@@ -72,7 +72,7 @@ function ServicePage() {
           {Array.isArray((s as any).includes) && (s as any).includes.length > 0 && (
             <div className="mt-10 grid sm:grid-cols-2 gap-4">
               {((s as any).includes as string[]).map((t) => (
-                <div key={t} className="flex items-start gap-3 p-4 border border-gold/30 rounded-sm bg-card/40">
+                <div key={t} className="flex items-start gap-3 p-4 border border-gold/30 rounded-xl bg-card/40">
                   <Check className="w-4 h-4 text-gold mt-1 flex-shrink-0" />
                   <div className="text-sm">{t}</div>
                 </div>
@@ -82,7 +82,7 @@ function ServicePage() {
         </div>
 
         <aside className="lg:col-span-5">
-          <div className="sticky top-28 p-8 border border-gold/40 rounded-sm bg-card/60 backdrop-blur">
+          <div className="sticky top-28 p-8 border border-gold/40 rounded-xl bg-card/60 backdrop-blur">
             <div className="w-16 h-16 rounded-full bg-gold-gradient flex items-center justify-center shadow-gold">
               <Icon className="w-7 h-7 text-primary-foreground" />
             </div>
@@ -97,13 +97,13 @@ function ServicePage() {
             <div className="mt-8 space-y-3">
               <button
                 onClick={handleBuy}
-                className="w-full inline-flex items-center justify-center gap-3 px-6 py-4 bg-gold-gradient text-primary-foreground rounded-sm text-sm uppercase tracking-[0.2em] hover:opacity-95 shadow-gold transition"
+                className="w-full inline-flex items-center justify-center gap-3 px-6 py-4 bg-gold-gradient text-primary-foreground rounded-xl text-sm uppercase tracking-[0.2em] hover:opacity-95 shadow-gold transition"
               >
                 Оформить
               </button>
               <button
                 onClick={handleAdd}
-                className="w-full inline-flex items-center justify-center gap-3 px-6 py-4 border border-gold rounded-sm text-sm uppercase tracking-[0.2em] hover:bg-gold/10 transition"
+                className="w-full inline-flex items-center justify-center gap-3 px-6 py-4 border border-gold rounded-xl text-sm uppercase tracking-[0.2em] hover:bg-gold/10 transition"
               >
                 <ShoppingBag className="w-4 h-4" /> В корзину
               </button>

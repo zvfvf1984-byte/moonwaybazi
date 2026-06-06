@@ -89,11 +89,11 @@ function Admin() {
         <p className="mt-4 text-muted-foreground">
           У вашего аккаунта нет роли администратора. Попросите супер-админа выдать вам роль командой:
         </p>
-        <pre className="mt-6 p-4 bg-card border border-gold/30 rounded-sm text-xs text-left overflow-auto">
+        <pre className="mt-6 p-4 bg-card border border-gold/30 rounded-xl text-xs text-left overflow-auto">
 {`INSERT INTO public.user_roles (user_id, role)
 VALUES ('${userId ?? "<ваш user_id>"}', 'admin');`}
         </pre>
-        <button onClick={signOut} className="mt-8 px-6 py-3 border border-gold rounded-sm text-sm uppercase tracking-[0.2em] hover:bg-gold/10">
+        <button onClick={signOut} className="mt-8 px-6 py-3 border border-gold rounded-xl text-sm uppercase tracking-[0.2em] hover:bg-gold/10">
           Выйти
         </button>
       </div>
@@ -108,10 +108,10 @@ VALUES ('${userId ?? "<ваш user_id>"}', 'admin');`}
           <h1 className="mt-2 font-display text-4xl">Админка</h1>
         </div>
         <div className="flex items-center gap-3">
-          <button onClick={() => setShowPwd(true)} className="inline-flex items-center gap-2 px-5 py-2.5 border border-gold rounded-sm text-xs uppercase tracking-[0.2em] hover:bg-gold/10">
+          <button onClick={() => setShowPwd(true)} className="inline-flex items-center gap-2 px-5 py-2.5 border border-gold rounded-xl text-xs uppercase tracking-[0.2em] hover:bg-gold/10">
             <KeyRound className="w-4 h-4" /> Сменить пароль
           </button>
-          <button onClick={signOut} className="inline-flex items-center gap-2 px-5 py-2.5 border border-gold rounded-sm text-xs uppercase tracking-[0.2em] hover:bg-gold/10">
+          <button onClick={signOut} className="inline-flex items-center gap-2 px-5 py-2.5 border border-gold rounded-xl text-xs uppercase tracking-[0.2em] hover:bg-gold/10">
             <LogOut className="w-4 h-4" /> Выйти
           </button>
         </div>
@@ -119,7 +119,7 @@ VALUES ('${userId ?? "<ваш user_id>"}', 'admin');`}
 
       {showPwd && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur flex items-center justify-center p-6">
-          <div className="bg-card border border-gold/40 rounded-sm w-full max-w-md p-8">
+          <div className="bg-card border border-gold/40 rounded-xl w-full max-w-md p-8">
             <div className="flex items-center justify-between">
               <h3 className="font-display text-2xl">Смена пароля</h3>
               <button onClick={() => setShowPwd(false)} className="w-10 h-10 hover:bg-gold/10 rounded"><X className="w-4 h-4 mx-auto" /></button>
@@ -127,16 +127,16 @@ VALUES ('${userId ?? "<ваш user_id>"}', 'admin');`}
             <div className="mt-6 space-y-4">
               <label className="block">
                 <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Новый пароль</span>
-                <input type="password" value={newPwd} onChange={(e) => setNewPwd(e.target.value)} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none" />
+                <input type="password" value={newPwd} onChange={(e) => setNewPwd(e.target.value)} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none" />
               </label>
               <label className="block">
                 <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Повторите пароль</span>
-                <input type="password" value={newPwd2} onChange={(e) => setNewPwd2(e.target.value)} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none" />
+                <input type="password" value={newPwd2} onChange={(e) => setNewPwd2(e.target.value)} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none" />
               </label>
             </div>
             <div className="mt-6 flex justify-end gap-3">
-              <button onClick={() => setShowPwd(false)} className="px-5 py-2.5 border border-gold/40 rounded-sm text-xs uppercase tracking-[0.2em] hover:bg-gold/10">Отмена</button>
-              <button disabled={savingPwd} onClick={changePassword} className="inline-flex items-center gap-2 px-6 py-2.5 bg-gold-gradient text-primary-foreground rounded-sm text-xs uppercase tracking-[0.2em] shadow-gold disabled:opacity-50">
+              <button onClick={() => setShowPwd(false)} className="px-5 py-2.5 border border-gold/40 rounded-xl text-xs uppercase tracking-[0.2em] hover:bg-gold/10">Отмена</button>
+              <button disabled={savingPwd} onClick={changePassword} className="inline-flex items-center gap-2 px-6 py-2.5 bg-gold-gradient text-primary-foreground rounded-xl text-xs uppercase tracking-[0.2em] shadow-gold disabled:opacity-50">
                 <Check className="w-4 h-4" /> {savingPwd ? "Сохранение…" : "Сохранить"}
               </button>
             </div>
@@ -199,7 +199,7 @@ function OrdersTab() {
   return (
     <div className="space-y-4">
       {orders.map((o) => (
-        <div key={o.id} className="p-6 border border-gold/30 rounded-sm bg-card/40">
+        <div key={o.id} className="p-6 border border-gold/30 rounded-xl bg-card/40">
           <div className="flex items-start justify-between gap-6 flex-wrap">
             <div>
               <div className="font-display text-2xl">{o.customer_name}</div>
@@ -211,7 +211,7 @@ function OrdersTab() {
               <select
                 value={o.status}
                 onChange={(e) => setStatus(o.id, e.target.value as Order["status"])}
-                className="px-3 py-1.5 bg-background border border-gold/30 rounded-sm text-xs uppercase tracking-wider"
+                className="px-3 py-1.5 bg-background border border-gold/30 rounded-xl text-xs uppercase tracking-wider"
               >
                 {(Object.keys(statusLabel) as Order["status"][]).map((s) => (
                   <option key={s} value={s}>{statusLabel[s]}</option>
@@ -292,14 +292,14 @@ function ServicesTab() {
   return (
     <div>
       <div className="flex justify-end mb-6">
-        <button onClick={() => setEditing(emptyService())} className="inline-flex items-center gap-2 px-5 py-2.5 bg-gold-gradient text-primary-foreground rounded-sm text-xs uppercase tracking-[0.2em] shadow-gold">
+        <button onClick={() => setEditing(emptyService())} className="inline-flex items-center gap-2 px-5 py-2.5 bg-gold-gradient text-primary-foreground rounded-xl text-xs uppercase tracking-[0.2em] shadow-gold">
           <Plus className="w-4 h-4" /> Добавить услугу
         </button>
       </div>
 
       <div className="grid gap-3">
         {services.map((s) => (
-          <div key={s.id} className="p-5 border border-gold/30 rounded-sm bg-card/40 flex items-center gap-6">
+          <div key={s.id} className="p-5 border border-gold/30 rounded-xl bg-card/40 flex items-center gap-6">
             <div className="flex-1">
               <div className="flex items-center gap-3">
                 <div className="font-display text-xl">{s.title}</div>
@@ -316,7 +316,7 @@ function ServicesTab() {
 
       {editing && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur flex items-center justify-center p-6 overflow-y-auto">
-          <div className="bg-card border border-gold/40 rounded-sm w-full max-w-2xl p-8 my-10">
+          <div className="bg-card border border-gold/40 rounded-xl w-full max-w-2xl p-8 my-10">
             <div className="flex items-center justify-between">
               <h3 className="font-display text-2xl">{editing.id ? "Редактировать" : "Новая услуга"}</h3>
               <button onClick={() => setEditing(null)} className="w-10 h-10 hover:bg-gold/10 rounded"><X className="w-4 h-4 mx-auto" /></button>
@@ -329,7 +329,7 @@ function ServicesTab() {
               <AField label="Цена" type="number" value={String(editing.price ?? 0)} onChange={(v) => setEditing({ ...editing, price: Number(v) })} />
               <AField label="Длительность" value={editing.duration ?? ""} onChange={(v) => setEditing({ ...editing, duration: v })} />
               <AField label="Сортировка" type="number" value={String(editing.sort_order ?? 0)} onChange={(v) => setEditing({ ...editing, sort_order: Number(v) })} />
-              <label className="flex items-center gap-3 px-4 py-3 border border-gold/30 rounded-sm">
+              <label className="flex items-center gap-3 px-4 py-3 border border-gold/30 rounded-xl">
                 <input type="checkbox" checked={editing.is_active ?? true} onChange={(e) => setEditing({ ...editing, is_active: e.target.checked })} />
                 <span className="text-sm">Активна</span>
               </label>
@@ -337,13 +337,13 @@ function ServicesTab() {
             <div className="mt-4">
               <label className="block">
                 <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Краткое описание</span>
-                <textarea value={editing.short_description ?? ""} onChange={(e) => setEditing({ ...editing, short_description: e.target.value })} rows={2} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none resize-none" />
+                <textarea value={editing.short_description ?? ""} onChange={(e) => setEditing({ ...editing, short_description: e.target.value })} rows={2} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none resize-none" />
               </label>
             </div>
             <div className="mt-4">
               <label className="block">
                 <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Полное описание</span>
-                <textarea value={editing.long_description ?? ""} onChange={(e) => setEditing({ ...editing, long_description: e.target.value })} rows={5} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none resize-none" />
+                <textarea value={editing.long_description ?? ""} onChange={(e) => setEditing({ ...editing, long_description: e.target.value })} rows={5} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none resize-none" />
               </label>
             </div>
             <div className="mt-4">
@@ -368,7 +368,7 @@ function ServicesTab() {
                         setEditing({ ...editing, includes: next });
                       }}
                       placeholder="Например: Письменное резюме после сессии"
-                      className="flex-1 px-4 py-2.5 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none text-sm"
+                      className="flex-1 px-4 py-2.5 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none text-sm"
                     />
                     <button
                       type="button"
@@ -376,7 +376,7 @@ function ServicesTab() {
                         const next = (editing.includes ?? []).filter((_, i) => i !== idx);
                         setEditing({ ...editing, includes: next });
                       }}
-                      className="px-3 border border-gold/30 rounded-sm text-muted-foreground hover:text-destructive hover:border-destructive"
+                      className="px-3 border border-gold/30 rounded-xl text-muted-foreground hover:text-destructive hover:border-destructive"
                       aria-label="Удалить"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -389,8 +389,8 @@ function ServicesTab() {
               </div>
             </div>
             <div className="mt-6 flex justify-end gap-3">
-              <button onClick={() => setEditing(null)} className="px-5 py-2.5 border border-gold/40 rounded-sm text-xs uppercase tracking-[0.2em] hover:bg-gold/10">Отмена</button>
-              <button onClick={save} className="inline-flex items-center gap-2 px-6 py-2.5 bg-gold-gradient text-primary-foreground rounded-sm text-xs uppercase tracking-[0.2em] shadow-gold">
+              <button onClick={() => setEditing(null)} className="px-5 py-2.5 border border-gold/40 rounded-xl text-xs uppercase tracking-[0.2em] hover:bg-gold/10">Отмена</button>
+              <button onClick={save} className="inline-flex items-center gap-2 px-6 py-2.5 bg-gold-gradient text-primary-foreground rounded-xl text-xs uppercase tracking-[0.2em] shadow-gold">
                 <Check className="w-4 h-4" /> Сохранить
               </button>
             </div>
@@ -405,7 +405,7 @@ function AField({ label, value, onChange, type = "text" }: { label: string; valu
   return (
     <label className="block">
       <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">{label}</span>
-      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none" />
+      <input type={type} value={value} onChange={(e) => onChange(e.target.value)} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none" />
     </label>
   );
 }

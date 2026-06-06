@@ -73,14 +73,14 @@ function Index() {
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
                 to="/catalog"
-                className="group inline-flex items-center gap-3 px-8 py-4 bg-gold-gradient text-primary-foreground rounded-sm text-sm uppercase tracking-[0.2em] hover:opacity-95 shadow-gold transition"
+                className="group inline-flex items-center gap-3 px-8 py-4 bg-gold-gradient text-primary-foreground rounded-xl text-sm uppercase tracking-[0.2em] hover:opacity-95 shadow-gold transition"
               >
                 Открыть каталог
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
               </Link>
               <Link
                 to="/about"
-                className="inline-flex items-center gap-3 px-8 py-4 border border-gold rounded-sm text-sm uppercase tracking-[0.2em] hover:bg-gold/10 transition"
+                className="inline-flex items-center gap-3 px-8 py-4 border border-gold rounded-xl text-sm uppercase tracking-[0.2em] hover:bg-gold/10 transition"
               >
                 О методе
               </Link>
@@ -136,7 +136,7 @@ function Index() {
                 key={c.label}
                 to="/catalog"
                 search={{ category: c.label }}
-                className="group relative p-8 border border-gold/40 rounded-sm bg-card/40 hover:bg-card hover:border-gold transition overflow-hidden"
+                className="group relative p-8 border border-gold/40 rounded-xl bg-card/40 hover:bg-card hover:border-gold transition overflow-hidden"
               >
                 <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-gold/5 group-hover:bg-gold/10 transition" />
                 <Icon className="relative w-8 h-8 text-gold" />
@@ -167,7 +167,7 @@ function Index() {
                 key={s.id}
                 to="/service/$slug"
                 params={{ slug: s.slug }}
-                className="group relative p-8 border border-gold/30 rounded-sm bg-card/50 hover:border-gold hover:bg-card transition flex flex-col"
+                className="group relative p-8 border border-gold/30 rounded-xl bg-card/50 hover:border-gold hover:bg-card transition flex flex-col"
               >
                 <div className="flex items-start justify-between">
                   <div className="w-14 h-14 rounded-full bg-gold/10 border border-gold/40 flex items-center justify-center">

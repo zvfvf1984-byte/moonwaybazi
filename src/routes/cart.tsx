@@ -65,7 +65,7 @@ function CartPage() {
             <Sparkles className="w-8 h-8 text-gold" />
           </div>
           <p className="mt-6 text-muted-foreground">Здесь пока пусто. Выберите консультацию в каталоге.</p>
-          <Link to="/catalog" className="mt-6 inline-block px-8 py-3 bg-gold-gradient text-primary-foreground rounded-sm text-sm uppercase tracking-[0.2em]">
+          <Link to="/catalog" className="mt-6 inline-block px-8 py-3 bg-gold-gradient text-primary-foreground rounded-xl text-sm uppercase tracking-[0.2em]">
             В каталог
           </Link>
         </div>
@@ -73,14 +73,14 @@ function CartPage() {
         <div className="mt-10 grid lg:grid-cols-12 gap-10">
           <div className="lg:col-span-7 space-y-4">
             {items.map((i) => (
-              <div key={i.id} className="p-6 border border-gold/30 rounded-sm bg-card/50 flex items-center gap-6">
+              <div key={i.id} className="p-6 border border-gold/30 rounded-xl bg-card/50 flex items-center gap-6">
                 <div className="flex-1">
                   <Link to="/service/$slug" params={{ slug: i.slug }} className="font-display text-xl hover:text-gold transition">
                     {i.title}
                   </Link>
                   <div className="mt-1 text-sm text-muted-foreground">{formatPrice(i.price)} × {i.quantity}</div>
                 </div>
-                <div className="flex items-center gap-1 border border-gold/40 rounded-sm">
+                <div className="flex items-center gap-1 border border-gold/40 rounded-xl">
                   <button onClick={() => updateQty(i.id, i.quantity - 1)} className="w-9 h-9 hover:bg-gold/10"><Minus className="w-3 h-3 mx-auto" /></button>
                   <div className="w-8 text-center text-sm">{i.quantity}</div>
                   <button onClick={() => updateQty(i.id, i.quantity + 1)} className="w-9 h-9 hover:bg-gold/10"><Plus className="w-3 h-3 mx-auto" /></button>
@@ -98,7 +98,7 @@ function CartPage() {
             </div>
           </div>
 
-          <form onSubmit={submit} className="lg:col-span-5 p-8 border border-gold/40 rounded-sm bg-card/60 space-y-5 h-fit sticky top-28">
+          <form onSubmit={submit} className="lg:col-span-5 p-8 border border-gold/40 rounded-xl bg-card/60 space-y-5 h-fit sticky top-28">
             <h2 className="font-display text-2xl text-gold">Оформление заявки</h2>
             <Field label="Имя" value={form.customer_name} onChange={(v) => setForm({ ...form, customer_name: v })} required />
             <Field label="Telegram / e-mail / телефон" value={form.customer_contact} onChange={(v) => setForm({ ...form, customer_contact: v })} required />
@@ -107,7 +107,7 @@ function CartPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full px-6 py-4 bg-gold-gradient text-primary-foreground rounded-sm text-sm uppercase tracking-[0.2em] hover:opacity-95 shadow-gold transition disabled:opacity-60"
+              className="w-full px-6 py-4 bg-gold-gradient text-primary-foreground rounded-xl text-sm uppercase tracking-[0.2em] hover:opacity-95 shadow-gold transition disabled:opacity-60"
             >
               {submitting ? "Отправляем…" : "Отправить заявку"}
             </button>
@@ -130,7 +130,7 @@ function Field({ label, value, onChange, required }: { label: string; value: str
         value={value}
         onChange={(e) => onChange(e.target.value)}
         required={required}
-        className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none transition"
+        className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none transition"
       />
     </label>
   );
@@ -144,7 +144,7 @@ function TextArea({ label, value, onChange }: { label: string; value: string; on
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={4}
-        className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none transition resize-none"
+        className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none transition resize-none"
       />
     </label>
   );
