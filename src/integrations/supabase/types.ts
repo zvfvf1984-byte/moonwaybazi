@@ -26,6 +26,7 @@ export type Database = {
           status: Database["public"]["Enums"]["order_status"]
           total: number
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           birth_info?: string | null
@@ -38,6 +39,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["order_status"]
           total?: number
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           birth_info?: string | null
@@ -50,6 +52,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["order_status"]
           total?: number
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
