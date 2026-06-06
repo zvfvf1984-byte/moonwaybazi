@@ -160,7 +160,7 @@ export function ChatBotWidget() {
       )}
 
       {open && (
-        <div className="fixed bottom-6 right-6 z-50 w-[min(92vw,380px)] h-[min(80vh,560px)] flex flex-col bg-card border border-gold/40 rounded-sm shadow-2xl overflow-hidden">
+        <div className="fixed bottom-6 right-6 z-50 w-[min(92vw,380px)] h-[min(80vh,560px)] flex flex-col bg-card border border-gold/40 rounded-xl shadow-2xl overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gold/30 bg-background/40">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-gold animate-pulse" />
@@ -186,7 +186,7 @@ export function ChatBotWidget() {
                   onChange={(e) => setName(e.target.value)}
                   required
                   maxLength={120}
-                  className="w-full px-3 py-2 bg-background/60 border border-gold/30 rounded-sm text-sm focus:border-gold focus:outline-none"
+                  className="w-full px-3 py-2 bg-background/60 border border-gold/30 rounded-xl text-sm focus:border-gold focus:outline-none"
                 />
               </label>
               <label className="block">
@@ -198,7 +198,7 @@ export function ChatBotWidget() {
                   type="tel"
                   maxLength={40}
                   placeholder="+7 ___ ___ __ __"
-                  className="w-full px-3 py-2 bg-background/60 border border-gold/30 rounded-sm text-sm focus:border-gold focus:outline-none"
+                  className="w-full px-3 py-2 bg-background/60 border border-gold/30 rounded-xl text-sm focus:border-gold focus:outline-none"
                 />
               </label>
               <label className="flex items-start gap-2 text-xs text-muted-foreground">
@@ -210,7 +210,7 @@ export function ChatBotWidget() {
               <button
                 type="submit"
                 disabled={!name.trim() || !phone.trim() || !agree || creating}
-                className="mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 bg-gold-gradient text-primary-foreground rounded-sm text-xs uppercase tracking-[0.2em] disabled:opacity-50 shadow-gold"
+                className="mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 bg-gold-gradient text-primary-foreground rounded-xl text-xs uppercase tracking-[0.2em] disabled:opacity-50 shadow-gold"
               >
                 {creating && <Loader2 className="w-4 h-4 animate-spin" />}
                 Начать чат
@@ -222,7 +222,7 @@ export function ChatBotWidget() {
                 {messages.map((m, i) => (
                   <div key={m.id ?? i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`max-w-[85%] px-3 py-2 rounded-sm text-sm whitespace-pre-wrap ${
+                      className={`max-w-[85%] px-3 py-2 rounded-xl text-sm whitespace-pre-wrap ${
                         m.role === "user"
                           ? "bg-gold-gradient text-primary-foreground"
                           : m.role === "operator"
@@ -237,7 +237,7 @@ export function ChatBotWidget() {
                 ))}
                 {sending && (
                   <div className="flex justify-start">
-                    <div className="px-3 py-2 rounded-sm bg-background/60 border border-gold/30 text-xs text-muted-foreground inline-flex items-center gap-2">
+                    <div className="px-3 py-2 rounded-xl bg-background/60 border border-gold/30 text-xs text-muted-foreground inline-flex items-center gap-2">
                       <Loader2 className="w-3 h-3 animate-spin" /> печатает…
                     </div>
                   </div>
@@ -259,12 +259,12 @@ export function ChatBotWidget() {
                   rows={1}
                   maxLength={4000}
                   placeholder="Ваше сообщение…"
-                  className="flex-1 resize-none px-3 py-2 bg-background border border-gold/30 rounded-sm text-sm focus:border-gold focus:outline-none max-h-32"
+                  className="flex-1 resize-none px-3 py-2 bg-background border border-gold/30 rounded-xl text-sm focus:border-gold focus:outline-none max-h-32"
                 />
                 <button
                   type="submit"
                   disabled={!text.trim() || sending}
-                  className="w-10 h-10 inline-flex items-center justify-center rounded-sm bg-gold-gradient text-primary-foreground disabled:opacity-40"
+                  className="w-10 h-10 inline-flex items-center justify-center rounded-xl bg-gold-gradient text-primary-foreground disabled:opacity-40"
                   aria-label="Отправить"
                 >
                   <Send className="w-4 h-4" />

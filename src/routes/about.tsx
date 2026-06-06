@@ -38,7 +38,7 @@ function About() {
       </div>
 
       <div className="mt-16 text-center">
-        <Link to="/catalog" className="inline-flex items-center gap-3 px-8 py-4 bg-gold-gradient text-primary-foreground rounded-sm text-sm uppercase tracking-[0.2em] shadow-gold">
+        <Link to="/catalog" className="inline-flex items-center gap-3 px-8 py-4 bg-gold-gradient text-primary-foreground rounded-xl text-sm uppercase tracking-[0.2em] shadow-gold">
           Выбрать консультацию
         </Link>
       </div>
@@ -48,7 +48,7 @@ function About() {
 
 function Card({ chinese, title, subtitle, children }: { chinese: string; title: string; subtitle: string; children: React.ReactNode }) {
   return (
-    <div className="p-8 border border-gold/30 rounded-sm bg-card/40">
+    <div className="p-8 border border-gold/30 rounded-xl bg-card/40">
       <div className="font-display text-5xl text-gold-gradient">{chinese}</div>
       <div className="mt-4 font-display text-2xl">{title}</div>
       <div className="text-xs uppercase tracking-[0.3em] text-gold mt-1">{subtitle}</div>

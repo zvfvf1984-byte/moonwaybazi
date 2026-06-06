@@ -42,7 +42,7 @@
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 0.875rem;
 
   /* Noir & Gold */
   --background: oklch(0.13 0.005 60);          /* near-black warm */

@@ -29,7 +29,7 @@ function NotFoundComponent() {
         <div className="mt-6">
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-sm bg-gold-gradient px-6 py-3 text-sm uppercase tracking-[0.2em] text-primary-foreground hover:opacity-90 transition"
+            className="inline-flex items-center justify-center rounded-xl bg-gold-gradient px-6 py-3 text-sm uppercase tracking-[0.2em] text-primary-foreground hover:opacity-90 transition"
           >
             На главную
           </Link>
@@ -54,11 +54,11 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => { router.invalidate(); reset(); }}
-            className="inline-flex items-center justify-center rounded-sm bg-gold-gradient px-6 py-3 text-sm uppercase tracking-[0.2em] text-primary-foreground"
+            className="inline-flex items-center justify-center rounded-xl bg-gold-gradient px-6 py-3 text-sm uppercase tracking-[0.2em] text-primary-foreground"
           >
             Попробовать снова
           </button>
-          <a href="/" className="inline-flex items-center justify-center rounded-sm border border-gold px-6 py-3 text-sm uppercase tracking-[0.2em]">
+          <a href="/" className="inline-flex items-center justify-center rounded-xl border border-gold px-6 py-3 text-sm uppercase tracking-[0.2em]">
             Домой
           </a>
         </div>
