@@ -17,6 +17,7 @@ type Service = {
   icon: string | null;
   is_active: boolean;
   sort_order: number;
+  includes: string[];
 };
 
 type Order = {
@@ -190,7 +191,7 @@ function OrdersTab() {
 }
 
 function emptyService(): Partial<Service> {
-  return { title: "", slug: "", category: "Личность", short_description: "", long_description: "", price: 0, duration: "", icon: "Sparkles", is_active: true, sort_order: 0 };
+  return { title: "", slug: "", category: "Личность", short_description: "", long_description: "", price: 0, duration: "", icon: "Sparkles", is_active: true, sort_order: 0, includes: ["Персональный разбор по дате и времени рождения","Письменное резюме после сессии","Рекомендации по благоприятным датам","Конфиденциальность гарантирована"] };
 }
 
 function ServicesTab() {
@@ -217,6 +218,7 @@ function ServicesTab() {
       icon: editing.icon ?? "Sparkles",
       is_active: editing.is_active ?? true,
       sort_order: Number(editing.sort_order ?? 0),
+      includes: (editing.includes ?? []).filter((x) => x && x.trim().length > 0),
     };
     const op = editing.id
       ? supabase.from("services").update(payload).eq("id", editing.id)
@@ -293,6 +295,48 @@ function ServicesTab() {
                 <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Полное описание</span>
                 <textarea value={editing.long_description ?? ""} onChange={(e) => setEditing({ ...editing, long_description: e.target.value })} rows={5} className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none resize-none" />
               </label>
+            </div>
+            <div className="mt-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground">Что включает (пункты)</span>
+                <button
+                  type="button"
+                  onClick={() => setEditing({ ...editing, includes: [...(editing.includes ?? []), ""] })}
+                  className="inline-flex items-center gap-1 text-xs text-gold hover:opacity-80"
+                >
+                  <Plus className="w-3 h-3" /> Добавить пункт
+                </button>
+              </div>
+              <div className="space-y-2">
+                {(editing.includes ?? []).map((item, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <input
+                      value={item}
+                      onChange={(e) => {
+                        const next = [...(editing.includes ?? [])];
+                        next[idx] = e.target.value;
+                        setEditing({ ...editing, includes: next });
+                      }}
+                      placeholder="Например: Письменное резюме после сессии"
+                      className="flex-1 px-4 py-2.5 bg-background/60 border border-gold/30 rounded-sm focus:border-gold focus:outline-none text-sm"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const next = (editing.includes ?? []).filter((_, i) => i !== idx);
+                        setEditing({ ...editing, includes: next });
+                      }}
+                      className="px-3 border border-gold/30 rounded-sm text-muted-foreground hover:text-destructive hover:border-destructive"
+                      aria-label="Удалить"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                {(!editing.includes || editing.includes.length === 0) && (
+                  <div className="text-xs text-muted-foreground italic">Пунктов нет — блок «Что включает» будет скрыт.</div>
+                )}
+              </div>
             </div>
             <div className="mt-6 flex justify-end gap-3">
               <button onClick={() => setEditing(null)} className="px-5 py-2.5 border border-gold/40 rounded-sm text-xs uppercase tracking-[0.2em] hover:bg-gold/10">Отмена</button>
