@@ -21,8 +21,9 @@ export function SiteHeader() {
       <div className="mx-auto max-w-7xl px-6 h-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
           <div className="relative w-10 h-10 flex items-center justify-center">
-            <div className="absolute inset-0 rounded-full bg-gold-gradient opacity-80 group-hover:opacity-100 transition" />
-            <span className="relative font-display text-2xl text-primary-foreground font-semibold">氣</span>
+            <div className="absolute -inset-2 rounded-full bg-gold/40 blur-xl animate-pulse" />
+            <div className="absolute inset-0 rounded-full bg-gold-gradient opacity-90 group-hover:opacity-100 transition shadow-gold" />
+            <span className="relative font-display text-2xl text-primary-foreground font-semibold">∞</span>
           </div>
           <div className="leading-tight">
             <div className="font-display text-xl tracking-wide">Qi & Code</div>

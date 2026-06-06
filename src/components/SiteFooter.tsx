@@ -6,8 +6,10 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-6 py-16 grid gap-10 md:grid-cols-4">
         <div className="md:col-span-2">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gold-gradient flex items-center justify-center">
-              <span className="font-display text-xl text-primary-foreground">氣</span>
+            <div className="relative w-10 h-10 flex items-center justify-center">
+              <div className="absolute -inset-2 rounded-full bg-gold/30 blur-xl" />
+              <div className="absolute inset-0 rounded-full bg-gold-gradient shadow-gold" />
+              <span className="relative font-display text-xl text-primary-foreground">∞</span>
             </div>
             <div className="font-display text-2xl">Qi & Code</div>
           </div>

@@ -62,9 +62,9 @@ function Index() {
               Древнее искусство · онлайн
             </div>
             <h1 className="mt-8 font-display text-6xl md:text-7xl lg:text-8xl leading-[0.95]">
-              Карта вашей <br />
-              <span className="text-gold-gradient italic">судьбы</span>,<br />
-              написанная стихиями.
+              Код вашей <br />
+              <span className="text-gold-gradient italic animate-shimmer-text">судьбы</span>,<br />
+              написанный стихиями.
             </h1>
             <p className="mt-8 max-w-xl text-lg text-muted-foreground leading-relaxed">
               Ба-Цзы и Ци Мэнь Дунь Цзя — две тысячи лет точных ответов о личности,
