@@ -1,0 +1,1 @@
+ALTER TABLE public.services ADD COLUMN IF NOT EXISTS includes text[] NOT NULL DEFAULT ARRAY['Персональный разбор по дате и времени рождения','Письменное резюме после сессии','Рекомендации по благоприятным датам','Конфиденциальность гарантирована']::text[];
