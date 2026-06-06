@@ -1,47 +1,119 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Trash2, Minus, Plus, ArrowLeft, Sparkles } from "lucide-react";
+import { Trash2, Minus, Plus, ArrowLeft, Sparkles, CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
 import { useCart, removeFromCart, updateQty, cartTotal, formatPrice, clearCart } from "@/lib/cart";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
 import { notifyOrderCreated } from "@/lib/notify.functions";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/cart")({
   head: () => ({ meta: [{ title: "Корзина — Qi & Code" }] }),
   component: CartPage,
 });
 
-const formSchema = z.object({
+type ContactType = "telegram" | "email" | "phone";
+
+const baseSchema = z.object({
   customer_name: z.string().trim().min(2, "Укажите имя").max(100),
-  customer_contact: z.string().trim().min(5, "Укажите контакт").max(200),
-  birth_info: z.string().trim().max(500).optional(),
+  contact_type: z.enum(["telegram", "email", "phone"]),
+  contact_value: z.string().trim().min(1, "Укажите контакт").max(200),
+  birth_date: z.string().optional(),
+  birth_time: z.string().optional(),
+  birth_place: z.string().trim().max(200).optional(),
   message: z.string().trim().max(2000).optional(),
+}).superRefine((val, ctx) => {
+  const v = val.contact_value.trim();
+  if (val.contact_type === "telegram") {
+    if (!/^@?[a-zA-Z0-9_]{4,}$|^(https?:\/\/)?t\.me\/[a-zA-Z0-9_]{4,}$/.test(v)) {
+      ctx.addIssue({ code: "custom", path: ["contact_value"], message: "Введите Telegram username (@user) или ссылку t.me/user" });
+    }
+  } else if (val.contact_type === "email") {
+    if (!z.string().email().safeParse(v).success) {
+      ctx.addIssue({ code: "custom", path: ["contact_value"], message: "Введите корректный e-mail" });
+    }
+  } else if (val.contact_type === "phone") {
+    const digits = v.replace(/\D/g, "");
+    if (digits.length < 10 || digits.length > 15) {
+      ctx.addIssue({ code: "custom", path: ["contact_value"], message: "Введите номер телефона (10–15 цифр)" });
+    }
+  }
+  if (val.birth_time && !val.birth_date) {
+    ctx.addIssue({ code: "custom", path: ["birth_date"], message: "Укажите дату рождения" });
+  }
 });
+
+const CONTACT_TABS: { id: ContactType; label: string; placeholder: string }[] = [
+  { id: "telegram", label: "Telegram", placeholder: "@username или t.me/username" },
+  { id: "email", label: "E-mail", placeholder: "you@example.com" },
+  { id: "phone", label: "Телефон", placeholder: "+7 999 123-45-67" },
+];
 
 function CartPage() {
   const items = useCart();
   const total = cartTotal(items);
   const navigate = useNavigate();
   const notifyOrder = useServerFn(notifyOrderCreated);
-  const [form, setForm] = useState({ customer_name: "", customer_contact: "", birth_info: "", message: "" });
+  const [customerName, setCustomerName] = useState("");
+  const [contactType, setContactType] = useState<ContactType>("telegram");
+  const [contactValue, setContactValue] = useState("");
+  const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
+  const [birthTime, setBirthTime] = useState("");
+  const [birthPlace, setBirthPlace] = useState("");
+  const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  const handleContactChange = (val: string) => {
+    if (contactType === "phone") {
+      // allow only digits, +, spaces, (), -
+      setContactValue(val.replace(/[^\d+\s()-]/g, ""));
+    } else if (contactType === "telegram") {
+      setContactValue(val.replace(/[^a-zA-Z0-9_@./:]/g, ""));
+    } else {
+      setContactValue(val);
+    }
+  };
+
+  const switchContactType = (t: ContactType) => {
+    setContactType(t);
+    setContactValue("");
+  };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (items.length === 0) return;
-    const parsed = formSchema.safeParse(form);
+
+    const birthDateStr = birthDate ? format(birthDate, "dd.MM.yyyy") : "";
+    const parsed = baseSchema.safeParse({
+      customer_name: customerName,
+      contact_type: contactType,
+      contact_value: contactValue,
+      birth_date: birthDateStr,
+      birth_time: birthTime,
+      birth_place: birthPlace,
+      message,
+    });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]?.message ?? "Проверьте поля");
       return;
     }
+
+    const contactLabel = contactType === "telegram" ? "Telegram" : contactType === "email" ? "E-mail" : "Телефон";
+    const customer_contact = `${contactLabel}: ${parsed.data.contact_value.trim()}`;
+    const birthParts = [birthDateStr, birthTime, birthPlace.trim()].filter(Boolean);
+    const birth_info = birthParts.length ? birthParts.join(", ") : null;
+
     setSubmitting(true);
     const { data: inserted, error } = await supabase.from("orders").insert({
       customer_name: parsed.data.customer_name,
-      customer_contact: parsed.data.customer_contact,
-      birth_info: parsed.data.birth_info || null,
-      message: parsed.data.message || null,
+      customer_contact,
+      birth_info,
+      message: message.trim() || null,
       items: items.map((i) => ({ id: i.id, slug: i.slug, title: i.title, price: i.price, quantity: i.quantity })),
       total,
     }).select("id").single();
@@ -57,6 +129,8 @@ function CartPage() {
     toast.success("Заявка отправлена! Мы свяжемся с вами.");
     navigate({ to: "/" });
   };
+
+  const activeTab = CONTACT_TABS.find((t) => t.id === contactType)!;
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-16">
@@ -106,10 +180,86 @@ function CartPage() {
 
           <form onSubmit={submit} className="lg:col-span-5 p-8 border border-gold/40 rounded-xl bg-card/60 space-y-5 h-fit sticky top-28">
             <h2 className="font-display text-2xl text-gold">Оформление заявки</h2>
-            <Field label="Имя" value={form.customer_name} onChange={(v) => setForm({ ...form, customer_name: v })} required />
-            <Field label="Telegram / e-mail / телефон" value={form.customer_contact} onChange={(v) => setForm({ ...form, customer_contact: v })} required />
-            <Field label="Дата, время и место рождения (если знаете)" value={form.birth_info} onChange={(v) => setForm({ ...form, birth_info: v })} />
-            <TextArea label="Ваш вопрос (опционально)" value={form.message} onChange={(v) => setForm({ ...form, message: v })} />
+
+            <Field label="Имя" value={customerName} onChange={setCustomerName} required />
+
+            {/* Contact: type selector + value */}
+            <div>
+              <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Способ связи *</span>
+              <div className="grid grid-cols-3 gap-2 mb-3">
+                {CONTACT_TABS.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    onClick={() => switchContactType(t.id)}
+                    className={cn(
+                      "py-2 px-3 rounded-xl border text-xs uppercase tracking-[0.15em] transition",
+                      contactType === t.id
+                        ? "border-gold bg-gold/10 text-gold"
+                        : "border-gold/30 text-muted-foreground hover:border-gold/60",
+                    )}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+              <input
+                value={contactValue}
+                onChange={(e) => handleContactChange(e.target.value)}
+                placeholder={activeTab.placeholder}
+                required
+                inputMode={contactType === "phone" ? "tel" : contactType === "email" ? "email" : "text"}
+                type={contactType === "email" ? "email" : "text"}
+                className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none transition"
+              />
+            </div>
+
+            {/* Birth: date + time + place */}
+            <div>
+              <span className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Данные рождения (если знаете)</span>
+              <div className="grid grid-cols-2 gap-3">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      type="button"
+                      className={cn(
+                        "w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl text-left flex items-center gap-2 hover:border-gold/60 transition",
+                        !birthDate && "text-muted-foreground",
+                      )}
+                    >
+                      <CalendarIcon className="w-4 h-4 text-gold" />
+                      {birthDate ? format(birthDate, "dd.MM.yyyy") : "Дата"}
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={birthDate}
+                      onSelect={setBirthDate}
+                      captionLayout="dropdown"
+                      defaultMonth={birthDate ?? new Date(1990, 0)}
+                      disabled={(d) => d > new Date() || d < new Date(1900, 0, 1)}
+                      initialFocus
+                      className={cn("p-3 pointer-events-auto")}
+                    />
+                  </PopoverContent>
+                </Popover>
+                <input
+                  type="time"
+                  value={birthTime}
+                  onChange={(e) => setBirthTime(e.target.value)}
+                  className="w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none transition"
+                />
+              </div>
+              <input
+                value={birthPlace}
+                onChange={(e) => setBirthPlace(e.target.value)}
+                placeholder="Место рождения (город, страна)"
+                className="mt-3 w-full px-4 py-3 bg-background/60 border border-gold/30 rounded-xl focus:border-gold focus:outline-none transition"
+              />
+            </div>
+
+            <TextArea label="Ваш вопрос (опционально)" value={message} onChange={setMessage} />
             <button
               type="submit"
               disabled={submitting}
