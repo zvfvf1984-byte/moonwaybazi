@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Pencil, Plus, Trash2, LogOut, ShieldAlert, Check, X, KeyRound } from "lucide-react";
 import { formatPrice } from "@/lib/cart";
+import { AdminChats } from "@/components/AdminChats";
 
 type Service = {
   id: string;
@@ -39,7 +40,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 function Admin() {
   const navigate = useNavigate();
-  const [tab, setTab] = useState<"orders" | "services">("orders");
+  const [tab, setTab] = useState<"orders" | "services" | "chats">("orders");
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [showPwd, setShowPwd] = useState(false);
@@ -144,7 +145,7 @@ VALUES ('${userId ?? "<ваш user_id>"}', 'admin');`}
       )}
 
       <div className="mt-8 flex gap-2 border-b border-gold/30">
-        {(["orders", "services"] as const).map((t) => (
+        {(["orders", "chats", "services"] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -152,12 +153,14 @@ VALUES ('${userId ?? "<ваш user_id>"}', 'admin');`}
               tab === t ? "border-gold text-gold" : "border-transparent text-muted-foreground hover:text-gold"
             }`}
           >
-            {t === "orders" ? "Заявки" : "Каталог"}
+            {t === "orders" ? "Заявки" : t === "chats" ? "Чаты" : "Каталог"}
           </button>
         ))}
       </div>
 
-      <div className="mt-8">{tab === "orders" ? <OrdersTab /> : <ServicesTab />}</div>
+      <div className="mt-8">
+        {tab === "orders" ? <OrdersTab /> : tab === "chats" ? <AdminChats /> : <ServicesTab />}
+      </div>
     </div>
   );
 }
