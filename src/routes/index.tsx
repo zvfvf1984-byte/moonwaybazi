@@ -99,19 +99,23 @@ function Index() {
                   <div className="mt-2 text-xs uppercase tracking-[0.5em] text-gold">Mìng · судьба</div>
                 </div>
               </div>
-              {["金", "木", "水", "火", "土"].map((ch, i) => (
-                <div
-                  key={ch}
-                  className="absolute font-display text-3xl text-gold/80"
-                  style={{
-                    top: `${50 - 45 * Math.cos((i / 5) * Math.PI * 2)}%`,
-                    left: `${50 + 45 * Math.sin((i / 5) * Math.PI * 2)}%`,
-                    transform: "translate(-50%,-50%)",
-                  }}
-                >
-                  {ch}
-                </div>
-              ))}
+              {["金", "木", "水", "火", "土"].map((ch, i) => {
+                const top = (50 - 45 * Math.cos((i / 5) * Math.PI * 2)).toFixed(4);
+                const left = (50 + 45 * Math.sin((i / 5) * Math.PI * 2)).toFixed(4);
+                return (
+                  <div
+                    key={ch}
+                    className="absolute font-display text-3xl text-gold/80"
+                    style={{
+                      top: `${top}%`,
+                      left: `${left}%`,
+                      transform: "translate(-50%, -50%)",
+                    }}
+                  >
+                    {ch}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
