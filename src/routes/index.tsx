@@ -218,6 +218,8 @@ function Index() {
           <div className="mt-4 text-xs uppercase tracking-[0.4em] text-muted-foreground">Лао-цзы · Дао Дэ Цзин</div>
         </div>
       </section>
+
+      <AffirmationsWidget open={affOpen} onClose={() => setAffOpen(false)} />
     </div>
   );
 }
