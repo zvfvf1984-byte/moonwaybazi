@@ -90,11 +90,18 @@ function Index() {
               <button
                 type="button"
                 onClick={() => setAffOpen(true)}
-                className="group inline-flex items-center gap-3 px-6 py-4 border border-gold rounded-xl text-left hover:bg-gold/10 transition max-w-md"
+                className="group relative inline-flex items-center gap-3 px-6 py-4 border border-gold rounded-xl text-left hover:bg-gold/10 transition max-w-md overflow-hidden shadow-gold"
               >
-                <Sparkles className="w-5 h-5 text-gold shrink-0" />
-                <span className="flex flex-col leading-tight">
-                  <span className="text-sm uppercase tracking-[0.2em] text-gold">
+                <span className="pointer-events-none absolute inset-0 rounded-xl animate-shimmer opacity-60" />
+                <span className="pointer-events-none absolute -inset-1 rounded-xl bg-gold/20 blur-xl opacity-50 animate-pulse" />
+                <span className="relative inline-flex items-center justify-center w-7 h-7 shrink-0">
+                  <Sparkles className="absolute w-6 h-6 text-gold animate-sparkle-spin" />
+                  <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-gold-soft animate-sparkle-twinkle" />
+                  <span className="absolute -bottom-1 -left-0.5 w-1 h-1 rounded-full bg-gold animate-sparkle-twinkle [animation-delay:0.6s]" />
+                  <span className="absolute top-1 -left-1.5 w-[3px] h-[3px] rounded-full bg-gold-soft animate-sparkle-twinkle [animation-delay:1.2s]" />
+                </span>
+                <span className="relative flex flex-col leading-tight">
+                  <span className="text-sm uppercase tracking-[0.2em] animate-shimmer-text">
                     Генератор аффирмаций
                   </span>
                   <span className="text-xs text-muted-foreground mt-1 normal-case tracking-normal">
