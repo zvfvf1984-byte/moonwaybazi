@@ -16,6 +16,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AffirmationsRouteImport } from './routes/affirmations'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -58,6 +59,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AffirmationsRoute = AffirmationsRouteImport.update({
+  id: '/affirmations',
+  path: '/affirmations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -91,6 +97,7 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/affirmations': typeof AffirmationsRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
@@ -105,6 +112,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/affirmations': typeof AffirmationsRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
@@ -121,6 +129,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/affirmations': typeof AffirmationsRoute
   '/auth': typeof AuthRoute
   '/cart': typeof CartRoute
   '/catalog': typeof CatalogRoute
@@ -137,6 +146,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/affirmations'
     | '/auth'
     | '/cart'
     | '/catalog'
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/affirmations'
     | '/auth'
     | '/cart'
     | '/catalog'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/about'
+    | '/affirmations'
     | '/auth'
     | '/cart'
     | '/catalog'
@@ -182,6 +194,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  AffirmationsRoute: typeof AffirmationsRoute
   AuthRoute: typeof AuthRoute
   CartRoute: typeof CartRoute
   CatalogRoute: typeof CatalogRoute
@@ -244,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/affirmations': {
+      id: '/affirmations'
+      path: '/affirmations'
+      fullPath: '/affirmations'
+      preLoaderRoute: typeof AffirmationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -304,6 +324,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  AffirmationsRoute: AffirmationsRoute,
   AuthRoute: AuthRoute,
   CartRoute: CartRoute,
   CatalogRoute: CatalogRoute,
