@@ -92,8 +92,9 @@ function Index() {
                 onClick={() => setAffOpen(true)}
                 className="group relative inline-flex items-center gap-3 px-6 py-4 border border-gold rounded-xl text-left hover:bg-gold/10 transition max-w-md overflow-hidden shadow-gold"
               >
-                <span className="pointer-events-none absolute inset-0 rounded-xl animate-shimmer opacity-60" />
-                <span className="pointer-events-none absolute -inset-1 rounded-xl bg-gold/20 blur-xl opacity-50 animate-pulse" />
+                <span className="pointer-events-none absolute inset-0 rounded-xl animate-shimmer opacity-30" />
+                <span className="pointer-events-none absolute -inset-1 rounded-xl bg-gold/10 blur-xl opacity-30 animate-pulse" />
+
                 <span className="relative inline-flex items-center justify-center w-7 h-7 shrink-0">
                   <Sparkles className="absolute w-6 h-6 text-gold animate-sparkle-spin" />
                   <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-gold-soft animate-sparkle-twinkle" />
