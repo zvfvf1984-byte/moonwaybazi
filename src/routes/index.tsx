@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, Sparkles, Coins, Heart, Mountain, Leaf, Moon } from "lucide-react";
 import { formatPrice } from "@/lib/cart";
+import { AffirmationsWidget } from "@/components/AffirmationsWidget";
 
 const iconMap = { Sparkles, Coins, Heart, Mountain, Leaf, Moon } as const;
 
@@ -44,6 +46,7 @@ const categories = [
 
 function Index() {
   const { data: services } = useSuspenseQuery(featuredQuery);
+  const [affOpen, setAffOpen] = useState(false);
 
   return (
     <div>
@@ -84,6 +87,21 @@ function Index() {
               >
                 О методе
               </Link>
+              <button
+                type="button"
+                onClick={() => setAffOpen(true)}
+                className="group inline-flex items-center gap-3 px-6 py-4 border border-gold rounded-xl text-left hover:bg-gold/10 transition max-w-md"
+              >
+                <Sparkles className="w-5 h-5 text-gold shrink-0" />
+                <span className="flex flex-col leading-tight">
+                  <span className="text-sm uppercase tracking-[0.2em] text-gold">
+                    Генератор аффирмаций
+                  </span>
+                  <span className="text-xs text-muted-foreground mt-1 normal-case tracking-normal">
+                    Зарядись положительной энергией на весь день
+                  </span>
+                </span>
+              </button>
             </div>
           </div>
 
@@ -200,6 +218,8 @@ function Index() {
           <div className="mt-4 text-xs uppercase tracking-[0.4em] text-muted-foreground">Лао-цзы · Дао Дэ Цзин</div>
         </div>
       </section>
+
+      <AffirmationsWidget open={affOpen} onClose={() => setAffOpen(false)} />
     </div>
   );
 }
