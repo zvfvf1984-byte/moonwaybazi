@@ -1,8 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ArrowRight, Sparkles, Coins, Heart, Mountain, Leaf, Moon } from "lucide-react";
 import { formatPrice } from "@/lib/cart";
+import { AffirmationsWidget } from "@/components/AffirmationsWidget";
 
 const iconMap = { Sparkles, Coins, Heart, Mountain, Leaf, Moon } as const;
 
@@ -44,6 +46,7 @@ const categories = [
 
 function Index() {
   const { data: services } = useSuspenseQuery(featuredQuery);
+  const [affOpen, setAffOpen] = useState(false);
 
   return (
     <div>
