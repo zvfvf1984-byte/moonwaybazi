@@ -87,6 +87,21 @@ function Index() {
               >
                 О методе
               </Link>
+              <button
+                type="button"
+                onClick={() => setAffOpen(true)}
+                className="group inline-flex items-center gap-3 px-6 py-4 border border-gold rounded-xl text-left hover:bg-gold/10 transition max-w-md"
+              >
+                <Sparkles className="w-5 h-5 text-gold shrink-0" />
+                <span className="flex flex-col leading-tight">
+                  <span className="text-sm uppercase tracking-[0.2em] text-gold">
+                    Генератор аффирмаций
+                  </span>
+                  <span className="text-xs text-muted-foreground mt-1 normal-case tracking-normal">
+                    Зарядись положительной энергией на весь день
+                  </span>
+                </span>
+              </button>
             </div>
           </div>
 
