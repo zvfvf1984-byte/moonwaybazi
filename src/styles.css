@@ -149,9 +149,9 @@
 @utility animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
 @utility animate-fade-up { animation: fade-up 0.8s ease-out both; }
 @utility animate-shimmer {
-  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--gold) 30%, transparent), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--gold) 12%, transparent), transparent);
   background-size: 200% 100%;
-  animation: shimmer 3s linear infinite;
+  animation: shimmer 8s linear infinite;
 }
 @utility animate-shimmer-text {
   background-image: linear-gradient(
@@ -166,8 +166,9 @@
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  animation: shimmer 3.5s linear infinite;
+  animation: shimmer 10s linear infinite;
 }
+
 
 @keyframes sparkle-spin {
   0% { transform: rotate(0deg) scale(1); filter: drop-shadow(0 0 0px var(--gold)); }
@@ -179,5 +180,6 @@
   50% { opacity: 1; transform: scale(1.2); }
 }
 
-@utility animate-sparkle-spin { animation: sparkle-spin 4s ease-in-out infinite; }
-@utility animate-sparkle-twinkle { animation: sparkle-twinkle 1.6s ease-in-out infinite; }
+@utility animate-sparkle-spin { animation: sparkle-spin 6s ease-in-out infinite; }
+@utility animate-sparkle-twinkle { animation: sparkle-twinkle 3s ease-in-out infinite; }
+
