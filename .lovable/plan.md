@@ -1,24 +1,30 @@
-## Fix: Restrict Realtime subscriptions to admins
+## Что меняем
 
-The tables `chat_sessions`, `chat_messages`, `chat_tickets` are in the `supabase_realtime` publication so the admin panel can receive live updates. The table-level SELECT policies already restrict reads to admins via `has_role(auth.uid(), 'admin')`, but Realtime broadcasts go through `realtime.messages`, which currently has no RLS — so any authenticated user can subscribe and receive row changes (including `visitor_phone`).
+1. **Убрать «Аффирмации» из шапки** (`src/components/SiteHeader.tsx`) — пункт не нужен, доступ будет через кнопку.
 
-### Change
+2. **Кнопка на главной** (`src/routes/index.tsx`, hero-блок) — рядом с «О методе» добавить третью кнопку:
+   - Подпись: **«Генератор аффирмаций — зарядись положительной энергией на весь день»**
+   - В стиле сайта: золотая обводка, иконка ✦/Sparkles, при наведении лёгкое золотое свечение
+   - На мобильных текст переносится, не ломает hero
 
-Add RLS to `realtime.messages` so only admins can receive Realtime events for our chat channels.
+3. **Открытие как у бота — плавающий виджет** (новый компонент `src/components/AffirmationsWidget.tsx`):
+   - По клику на кнопку открывается модальное окно/панель поверх сайта (не переход на отдельную страницу)
+   - Внутри — текущий генератор (категории, карточка с аффирмацией, «Получить / Другая / Скопировать»)
+   - Закрытие крестиком и по Esc, фон затемнён (backdrop-blur)
+   - Состояние «открыто/закрыто» хранится в React-состоянии на главной странице
+   - Никаких роутов и URL — это оверлей, аналогично `ChatBotWidget`
 
-```sql
-ALTER TABLE realtime.messages ENABLE ROW LEVEL SECURITY;
+4. **Удалить страницу-роут** `src/routes/affirmations.tsx` — больше не нужна, контент переезжает в виджет (логика и список аффирмаций сохраняются 1-в-1).
 
-CREATE POLICY "Admins receive chat realtime"
-ON realtime.messages
-FOR SELECT
-TO authenticated
-USING (public.has_role(auth.uid(), 'admin'));
-```
+## Технические детали
 
-### Notes
+- Виджет — обычный `<div role="dialog" aria-modal>` с порталом не нужен, достаточно `fixed inset-0 z-50` поверх контента.
+- Используем существующие токены: `bg-gold-gradient`, `border-gold`, `text-gold-gradient`, `shadow-gold`, `animate-fade-up`.
+- Кнопка на главной: вариант `outline + gold`, чтобы не конкурировать с основной CTA «Открыть каталог».
+- Mobile: кнопка занимает полную ширину строки, текст в 2 строки допустим.
 
-- Matches existing SELECT policies on `chat_sessions` / `chat_messages` / `chat_tickets`.
-- Anon and non-admin authenticated users will no longer receive any Realtime broadcasts; the admin panel (`AdminChats.tsx`) is unaffected because admins still pass the check.
-- No application code changes needed.
-- After the migration, mark the finding as fixed.
+## Файлы
+
+- редактируем: `src/routes/index.tsx`, `src/components/SiteHeader.tsx`
+- создаём: `src/components/AffirmationsWidget.tsx`
+- удаляем: `src/routes/affirmations.tsx`
