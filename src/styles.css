@@ -168,3 +168,16 @@
   color: transparent;
   animation: shimmer 3.5s linear infinite;
 }
+
+@keyframes sparkle-spin {
+  0% { transform: rotate(0deg) scale(1); filter: drop-shadow(0 0 0px var(--gold)); }
+  50% { transform: rotate(180deg) scale(1.15); filter: drop-shadow(0 0 6px var(--gold)); }
+  100% { transform: rotate(360deg) scale(1); filter: drop-shadow(0 0 0px var(--gold)); }
+}
+@keyframes sparkle-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.4); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@utility animate-sparkle-spin { animation: sparkle-spin 4s ease-in-out infinite; }
+@utility animate-sparkle-twinkle { animation: sparkle-twinkle 1.6s ease-in-out infinite; }
