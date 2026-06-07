@@ -102,6 +102,26 @@
   }
 }
 
+/* Custom scrollbar — blends with the dark theme */
+html {
+  scrollbar-color: color-mix(in oklab, var(--gold) 25%, transparent) transparent;
+  scrollbar-width: thin;
+}
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: color-mix(in oklab, var(--gold) 25%, transparent);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in oklab, var(--gold) 45%, transparent);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner { background: transparent; }
+
+
 @utility text-gold {
   color: var(--gold);
 }
